@@ -1,0 +1,17 @@
+# Auth tokens — never commit
+.bob/mcp.json
+
+# Bob internal temp / dump files
+.bob/tmp/
+
+# Excel lock file (created when file is open in Excel)
+~$*.xlsx
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# MCP token file — contains live JWT secrets
+MCP Expose File.txt
+
