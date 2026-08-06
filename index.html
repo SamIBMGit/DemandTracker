@@ -1,0 +1,550 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>SKF EMEA Dig Serv – Demand Dashboard Aug 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"Segoe UI",system-ui,sans-serif;font-size:14px;line-height:1.6;background:#f0f2f5;color:#1f2328}
+a{color:#3b82d4;text-decoration:none}
+/* ── layout ── */
+.page{max-width:1100px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:20px;font-weight:700;color:#1f2328;margin-bottom:2px}
+.subtitle{font-size:12px;color:#57606a;margin-bottom:18px}
+/* ── section titles ── */
+.sec{font-size:13px;font-weight:700;color:#57606a;text-transform:uppercase;letter-spacing:.06em;margin:24px 0 10px;border-bottom:1px solid #e5e7eb;padding-bottom:4px}
+/* ── KPI strip ── */
+.kpi-row{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:4px}
+.kpi{background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:12px 10px 10px;text-align:center}
+.kpi .num{font-size:28px;font-weight:700;line-height:1}
+.kpi .lbl{font-size:11px;color:#57606a;margin-top:3px}
+.kpi.green .num{color:#16a34a}
+.kpi.amber .num{color:#d97706}
+.kpi.red .num{color:#dc2626}
+.kpi.blue .num{color:#3b82d4}
+.kpi.purple .num{color:#7c5cd8}
+.kpi.slate .num{color:#475569}
+/* ── two-col row ── */
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:16px}
+.card-title{font-size:12px;font-weight:700;color:#57606a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+/* ── bar chart ── */
+.bar-row{display:flex;align-items:center;margin-bottom:7px;gap:8px}
+.bar-row .label{width:190px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
+.bar-row .label.sm{width:120px}
+.bar-track{flex:1;background:#f0f2f5;border-radius:3px;height:14px;overflow:hidden}
+.bar-fill{height:14px;border-radius:3px;transition:width .3s}
+.bar-row .count{width:28px;font-size:12px;font-weight:700;text-align:right;flex-shrink:0;color:#1f2328}
+.bar-row .pct{width:34px;font-size:11px;color:#57606a;text-align:right;flex-shrink:0}
+/* colours */
+.c-closed{background:#16a34a}
+.c-dab{background:#f59e0b}
+.c-hold{background:#94a3b8}
+.c-ps{background:#60a5fa}
+.c-real{background:#7c5cd8}
+.c-sfm{background:#a78bfa}
+.c-screen{background:#38bdf8}
+.c-dep{background:#34d399}
+.c-inc{background:#f87171}
+.c-other{background:#fb923c}
+.c-samarendu{background:#3b82d4}
+.c-dinesh{background:#7c5cd8}
+.c-mickey{background:#0ea5e9}
+.c-others{background:#94a3b8}
+.c-apim{background:#3b82d4}
+.c-s4h{background:#7c5cd8}
+.c-sfm2{background:#0ea5e9}
+.c-snow{background:#34d399}
+.c-c4c{background:#f59e0b}
+.c-spq{background:#f87171}
+.c-svmx{background:#a78bfa}
+.c-gts{background:#38bdf8}
+.c-mdg{background:#fb923c}
+.c-wcl{background:#94a3b8}
+/* ── donut SVG ── */
+.donut-wrap{display:flex;align-items:center;gap:18px}
+.donut-legend{display:flex;flex-direction:column;gap:5px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px}
+.legend-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+/* ── status badge ── */
+.badge{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11px;font-weight:600;white-space:nowrap}
+.b-closed{background:#dcfce7;color:#15803d}
+.b-dab{background:#fef3c7;color:#b45309}
+.b-hold{background:#f1f5f9;color:#475569}
+.b-ps{background:#dbeafe;color:#1d4ed8}
+.b-real{background:#ede9fe;color:#6d28d9}
+.b-inc{background:#fee2e2;color:#dc2626}
+.b-screen{background:#e0f2fe;color:#0369a1}
+.b-dep{background:#d1fae5;color:#065f46}
+.b-other{background:#ffedd5;color:#c2410c}
+/* ── table ── */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:#f7f8fa;border-bottom:2px solid #e5e7eb;padding:7px 8px;text-align:left;font-weight:700;font-size:11px;color:#57606a;white-space:nowrap}
+td{padding:6px 8px;border-bottom:1px solid #f0f2f5;vertical-align:top}
+tr:hover td{background:#f7f8fa}
+.td-num{color:#57606a;font-size:11px}
+.td-sys{font-size:11px;color:#57606a}
+/* ── progress ring ── */
+.ring-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:space-around}
+.ring-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:#57606a}
+.ring-item strong{font-size:15px;color:#1f2328}
+/* ── timeline ── */
+.tl-row{display:flex;align-items:flex-start;margin-bottom:9px;gap:10px}
+.tl-dot{width:10px;height:10px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.tl-content{font-size:12px}
+.tl-content .tl-date{font-weight:700;color:#57606a;font-size:11px}
+.tl-content .tl-title{color:#1f2328}
+/* ── alert box ── */
+.alert{background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:10px 14px;margin-bottom:14px}
+.alert-title{font-weight:700;color:#dc2626;font-size:12px;margin-bottom:4px}
+.alert ul{padding-left:16px;font-size:12px;color:#7f1d1d}
+.alert ul li{margin-bottom:2px}
+/* ── info box ── */
+.infobox{background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:10px 14px;margin-bottom:14px}
+.infobox-title{font-weight:700;color:#1d4ed8;font-size:12px;margin-bottom:4px}
+.infobox p{font-size:12px;color:#1e3a8a}
+/* ── pipeline card ── */
+.pipe-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pipe-card{background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:12px;font-size:12px}
+.pipe-card .pc-num{font-size:22px;font-weight:700;color:#3b82d4}
+.pipe-card .pc-lbl{color:#57606a;font-size:11px}
+/* ── heatmap ── */
+.hmap{border-collapse:collapse;font-size:11px;width:100%}
+.hmap th{background:#f7f8fa;padding:5px 8px;font-weight:700;color:#57606a;border:1px solid #e5e7eb;text-align:center}
+.hmap td{padding:5px 8px;border:1px solid #e5e7eb;text-align:center;font-weight:700}
+.h0{background:#f7f8fa;color:#94a3b8}
+.h1{background:#dbeafe;color:#1d4ed8}
+.h2{background:#bfdbfe;color:#1d4ed8}
+.h3{background:#93c5fd;color:#1e40af}
+.h4{background:#60a5fa;color:#1e3a8a}
+.h5{background:#3b82f6;color:#fff}
+.h6{background:#2563eb;color:#fff}
+.h7{background:#1d4ed8;color:#fff}
+.hmap .sys-label{text-align:left;font-weight:700;color:#1f2328;background:#f7f8fa}
+/* ── draft table ── */
+.rtag{display:inline-block;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:700}
+.r-y{background:#d1fae5;color:#065f46}
+.r-n{background:#f1f5f9;color:#475569}
+.r-hold{background:#fef3c7;color:#92400e}
+.r-inv{background:#fee2e2;color:#991b1b}
+/* ── footer ── */
+.footer{text-align:center;font-size:11px;color:#94a3b8;border-top:1px solid #e5e7eb;padding-top:14px;margin-top:32px}
+</style>
+</head>
+<body>
+<div class="page">
+
+
+<h1>SKF EMEA Digital Services — Demand Status Dashboard</h1>
+<div class="subtitle">Source: EMEA Dig Serv_Demand Status_05.08.2026.xlsx  ·  72 Final Demands  ·  124 Draft/IDEA rows  ·  As of 5 August 2026</div>
+
+
+<div class="alert">
+  <div class="alert-title">⚠ Attention Required — Blocked / Critical Items</div>
+  <ul>
+    <li><strong>DMND0028917</strong> – ASN &amp; Packing Slip: INC2687825 object locked under Project West hard freeze (Dinesh)</li>
+    <li><strong>22 demands</strong> carry status "DAB Rejected" = PS Approved &amp; awaiting DAB confirmation to commence realization</li>
+    <li><strong>DMND0024256</strong> Digital Certificate: 5 compliance certificates (PFAS, TSCA, CEPA, Prop65, POP) blocked pending parent demand</li>
+    <li><strong>DMND0027327, DMND0031833, DMND0031673</strong>: On Hold due to Project West dependency</li>
+  </ul>
+</div>
+
+
+<div class="infobox">
+  <div class="infobox-title">ℹ DAB Rejected = PS Approved, Awaiting DAB Confirmation</div>
+  <p>In this tracker "DAB Rejected" does NOT mean permanently rejected. It means Pre-Study has been approved by the business and the demand is queued for Digital Architecture Board confirmation before realization commences. 22 of 72 demands are in this state.</p>
+</div>
+
+
+<div class="sec">Key Performance Indicators</div>
+<div class="kpi-row">
+  <div class="kpi green"><div class="num">26</div><div class="lbl">Closed / Deployed</div></div>
+  <div class="kpi amber"><div class="num">22</div><div class="lbl">Awaiting DAB Approval</div></div>
+  <div class="kpi slate"><div class="num">9</div><div class="lbl">On Hold</div></div>
+  <div class="kpi blue"><div class="num">6</div><div class="lbl">Pre-Study Phase</div></div>
+  <div class="kpi purple"><div class="num">5</div><div class="lbl">Under Realization</div></div>
+  <div class="kpi red"><div class="num">4</div><div class="lbl">Screening / Incident</div></div>
+</div>
+<div class="kpi-row" style="margin-top:10px">
+  <div class="kpi blue"><div class="num">72</div><div class="lbl">Total Final Demands</div></div>
+  <div class="kpi slate"><div class="num">36%</div><div class="lbl">Completion Rate</div></div>
+  <div class="kpi amber"><div class="num">31%</div><div class="lbl">DAB Queue Rate</div></div>
+  <div class="kpi slate"><div class="num">13%</div><div class="lbl">On Hold Rate</div></div>
+  <div class="kpi purple"><div class="num">124</div><div class="lbl">Draft Pipeline Rows</div></div>
+  <div class="kpi green"><div class="num">18</div><div class="lbl">Draft on Roadmap</div></div>
+</div>
+
+
+<div class="sec">Status Distribution &amp; Ownership</div>
+<div class="row2">
+  
+  <div class="card">
+    <div class="card-title">Overall Backend Status — 72 Demands</div>
+    <div class="bar-row"><div class="label">Closed</div><div class="bar-track"><div class="bar-fill c-closed" style="width:100%"></div></div><div class="count">26</div><div class="pct">36%</div></div>
+    <div class="bar-row"><div class="label">DAB Rejected (PS Apprvd)</div><div class="bar-track"><div class="bar-fill c-dab" style="width:85%"></div></div><div class="count">22</div><div class="pct">31%</div></div>
+    <div class="bar-row"><div class="label">ON HOLD</div><div class="bar-track"><div class="bar-fill c-hold" style="width:35%"></div></div><div class="count">9</div><div class="pct">13%</div></div>
+    <div class="bar-row"><div class="label">Pre-Study Phase</div><div class="bar-track"><div class="bar-fill c-ps" style="width:23%"></div></div><div class="count">6</div><div class="pct">8%</div></div>
+    <div class="bar-row"><div class="label">Under SFM Realization</div><div class="bar-track"><div class="bar-fill c-sfm" style="width:12%"></div></div><div class="count">3</div><div class="pct">4%</div></div>
+    <div class="bar-row"><div class="label">Screening Phase</div><div class="bar-track"><div class="bar-fill c-screen" style="width:12%"></div></div><div class="count">3</div><div class="pct">4%</div></div>
+    <div class="bar-row"><div class="label">Under Realization</div><div class="bar-track"><div class="bar-fill c-real" style="width:8%"></div></div><div class="count">2</div><div class="pct">3%</div></div>
+    <div class="bar-row"><div class="label">Partially Deployed</div><div class="bar-track"><div class="bar-fill c-dep" style="width:4%"></div></div><div class="count">1</div><div class="pct">1%</div></div>
+    <div class="bar-row"><div class="label">Deployed into PRD</div><div class="bar-track"><div class="bar-fill c-dep" style="width:4%"></div></div><div class="count">1</div><div class="pct">1%</div></div>
+    <div class="bar-row"><div class="label">Incident Fix</div><div class="bar-track"><div class="bar-fill c-inc" style="width:4%"></div></div><div class="count">1</div><div class="pct">1%</div></div>
+    <div class="bar-row"><div class="label">PS Yet to Start</div><div class="bar-track"><div class="bar-fill c-other" style="width:4%"></div></div><div class="count">1</div><div class="pct">1%</div></div>
+    <div class="bar-row"><div class="label">Special Price / Other</div><div class="bar-track"><div class="bar-fill c-other" style="width:4%"></div></div><div class="count">1</div><div class="pct">1%</div></div>
+  </div>
+
+  
+  <div class="card">
+    <div class="card-title">Primary Owner Breakdown</div>
+    <div class="bar-row"><div class="label">Samarendu Kumar</div><div class="bar-track"><div class="bar-fill c-samarendu" style="width:100%"></div></div><div class="count">32</div><div class="pct">44%</div></div>
+    <div class="bar-row"><div class="label">Dinesh Kumar</div><div class="bar-track"><div class="bar-fill c-dinesh" style="width:66%"></div></div><div class="count">21</div><div class="pct">29%</div></div>
+    <div class="bar-row"><div class="label">Mickey Ekroth</div><div class="bar-track"><div class="bar-fill c-mickey" style="width:9%"></div></div><div class="count">3</div><div class="pct">4%</div></div>
+    <div class="bar-row"><div class="label">SPQ+ Team</div><div class="bar-track"><div class="bar-fill c-others" style="width:3%"></div></div><div class="count">1</div><div class="pct">1%</div></div>
+    <div class="bar-row"><div class="label">Sukanya</div><div class="bar-track"><div class="bar-fill c-others" style="width:3%"></div></div><div class="count">1</div><div class="pct">1%</div></div>
+    <div class="bar-row"><div class="label">Andreas Stoller</div><div class="bar-track"><div class="bar-fill c-others" style="width:3%"></div></div><div class="count">1</div><div class="pct">1%</div></div>
+    <div class="bar-row"><div class="label">Andrew Dollinger</div><div class="bar-track"><div class="bar-fill c-others" style="width:3%"></div></div><div class="count">1</div><div class="pct">1%</div></div>
+    <div class="bar-row"><div class="label">Front End / Samarendu</div><div class="bar-track"><div class="bar-fill c-others" style="width:3%"></div></div><div class="count">1</div><div class="pct">1%</div></div>
+    <div class="bar-row"><div class="label">Unassigned / TBD</div><div class="bar-track"><div class="bar-fill c-others" style="width:11%"></div></div><div class="count">11</div><div class="pct">15%</div></div>
+    <div style="margin-top:14px;padding-top:10px;border-top:1px solid #f0f2f5">
+      <div class="card-title" style="margin-bottom:8px">Owner × Status (Closed demands)</div>
+      <div class="bar-row"><div class="label sm">Samarendu – Closed</div><div class="bar-track"><div class="bar-fill c-samarendu" style="width:100%"></div></div><div class="count">13</div></div>
+      <div class="bar-row"><div class="label sm">Dinesh – Closed</div><div class="bar-track"><div class="bar-fill c-dinesh" style="width:62%"></div></div><div class="count">8</div></div>
+      <div class="bar-row"><div class="label sm">Mickey – Closed</div><div class="bar-track"><div class="bar-fill c-mickey" style="width:23%"></div></div><div class="count">3</div></div>
+      <div class="bar-row"><div class="label sm">Others – Closed</div><div class="bar-track"><div class="bar-fill c-others" style="width:15%"></div></div><div class="count">2</div></div>
+    </div>
+  </div>
+</div>
+
+
+<div class="sec">Status Composition &amp; Systems Involved</div>
+<div class="row2">
+  
+  <div class="card">
+    <div class="card-title">Status Composition (% of 72)</div>
+    <div class="donut-wrap">
+      
+      
+      <svg width="160" height="160">
+        
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#16a34a" stroke-width="26" transform="rotate(-90 80 80)"></circle>
+        
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#f59e0b" stroke-width="26" transform="rotate(-90 80 80)"></circle>
+        
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#94a3b8" stroke-width="26" transform="rotate(-90 80 80)"></circle>
+        
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#60a5fa" stroke-width="26" transform="rotate(-90 80 80)"></circle>
+        
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#7c5cd8" stroke-width="26" transform="rotate(-90 80 80)"></circle>
+        
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#38bdf8" stroke-width="26" transform="rotate(-90 80 80)"></circle>
+        
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#a78bfa" stroke-width="26" transform="rotate(-90 80 80)"></circle>
+        
+        <circle cx="80" cy="80" r="60" fill="none" stroke="#fb923c" stroke-width="26" transform="rotate(-90 80 80)"></circle>
+        <text x="80" y="75" text-anchor="middle" font-size="22" font-weight="700" fill="#1f2328">72</text>
+        <text x="80" y="93" text-anchor="middle" font-size="11" fill="#57606a">demands</text>
+      </svg>
+      <div class="donut-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div>Closed (36%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>DAB Approved/Queue (31%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#94a3b8"></div>On Hold (13%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div>Pre-Study Phase (8%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#7c5cd8"></div>SFM Realization (4%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#38bdf8"></div>Screening (4%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div>Under Realization (3%)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#fb923c"></div>Other (4%)</div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="card">
+    <div class="card-title">Top Systems Involved (demand count)</div>
+    <div class="bar-row"><div class="label">APIM</div><div class="bar-track"><div class="bar-fill c-apim" style="width:100%"></div></div><div class="count">38</div></div>
+    <div class="bar-row"><div class="label">SAP S4H</div><div class="bar-track"><div class="bar-fill c-s4h" style="width:84%"></div></div><div class="count">32</div></div>
+    <div class="bar-row"><div class="label">SFM</div><div class="bar-track"><div class="bar-fill c-sfm2" style="width:58%"></div></div><div class="count">22</div></div>
+    <div class="bar-row"><div class="label">Snowflake</div><div class="bar-track"><div class="bar-fill c-snow" style="width:37%"></div></div><div class="count">14</div></div>
+    <div class="bar-row"><div class="label">C4C</div><div class="bar-track"><div class="bar-fill c-c4c" style="width:24%"></div></div><div class="count">9</div></div>
+    <div class="bar-row"><div class="label">SPQ+</div><div class="bar-track"><div class="bar-fill c-spq" style="width:21%"></div></div><div class="count">8</div></div>
+    <div class="bar-row"><div class="label">ServiceMax / SVMX</div><div class="bar-track"><div class="bar-fill c-svmx" style="width:13%"></div></div><div class="count">5</div></div>
+    <div class="bar-row"><div class="label">GTS</div><div class="bar-track"><div class="bar-fill c-gts" style="width:11%"></div></div><div class="count">4</div></div>
+    <div class="bar-row"><div class="label">MDG</div><div class="bar-track"><div class="bar-fill c-mdg" style="width:11%"></div></div><div class="count">4</div></div>
+    <div class="bar-row"><div class="label">WCL / Findwise</div><div class="bar-track"><div class="bar-fill c-wcl" style="width:8%"></div></div><div class="count">3</div></div>
+  </div>
+</div>
+
+
+<div class="sec">System × Status Heatmap</div>
+<div class="card" style="margin-bottom:14px">
+  <div class="card-title">Demand count per System per Status (top 8 systems)</div>
+  <div class="tbl-wrap">
+    <table class="hmap">
+      <tr>
+        <th class="sys-label">System</th>
+        <th>Closed</th>
+        <th>DAB Queue</th>
+        <th>ON HOLD</th>
+        <th>Pre-Study</th>
+        <th>Realization</th>
+        <th>Screening</th>
+        <th>Other</th>
+        <th>Total</th>
+      </tr>
+      <tr><td class="sys-label">APIM</td><td class="h5">14</td><td class="h5">12</td><td class="h3">5</td><td class="h2">3</td><td class="h2">2</td><td class="h1">1</td><td class="h1">1</td><td class="h7">38</td></tr>
+      <tr><td class="sys-label">SAP S4H</td><td class="h5">13</td><td class="h4">8</td><td class="h3">5</td><td class="h2">3</td><td class="h2">2</td><td class="h1">1</td><td class="h0">0</td><td class="h6">32</td></tr>
+      <tr><td class="sys-label">SFM</td><td class="h4">8</td><td class="h3">5</td><td class="h2">2</td><td class="h3">4</td><td class="h2">3</td><td class="h0">0</td><td class="h0">0</td><td class="h5">22</td></tr>
+      <tr><td class="sys-label">Snowflake</td><td class="h3">4</td><td class="h2">2</td><td class="h4">6</td><td class="h1">1</td><td class="h1">1</td><td class="h0">0</td><td class="h0">0</td><td class="h4">14</td></tr>
+      <tr><td class="sys-label">C4C</td><td class="h2">3</td><td class="h3">4</td><td class="h0">0</td><td class="h1">1</td><td class="h1">1</td><td class="h0">0</td><td class="h0">0</td><td class="h3">9</td></tr>
+      <tr><td class="sys-label">SPQ+</td><td class="h2">3</td><td class="h2">2</td><td class="h1">1</td><td class="h0">0</td><td class="h1">1</td><td class="h1">1</td><td class="h0">0</td><td class="h3">8</td></tr>
+      <tr><td class="sys-label">ServiceMax</td><td class="h1">1</td><td class="h2">2</td><td class="h0">0</td><td class="h1">1</td><td class="h0">0</td><td class="h0">0</td><td class="h1">1</td><td class="h2">5</td></tr>
+      <tr><td class="sys-label">GTS</td><td class="h1">1</td><td class="h2">2</td><td class="h0">0</td><td class="h0">0</td><td class="h0">0</td><td class="h0">0</td><td class="h1">1</td><td class="h2">4</td></tr>
+    </table>
+  </div>
+  <div style="font-size:11px;color:#57606a;margin-top:8px">Colour intensity = demand volume. Darker blue = higher count.</div>
+</div>
+
+
+<div class="sec">SAP Release Timeline — Active &amp; Upcoming Releases</div>
+<div class="card" style="margin-bottom:14px">
+  <div class="card-title">Demands Mapped to SAP / SFM Release Milestones</div>
+  <div class="tl-row"><div class="tl-dot" style="background:#16a34a"></div><div class="tl-content"><div class="tl-date">SAP 2025_01 Jan (Delivered)</div><div class="tl-title">DMND0027362 – Final Customer in S4 APIs (Closed)</div></div></div>
+  <div class="tl-row"><div class="tl-dot" style="background:#16a34a"></div><div class="tl-content"><div class="tl-date">SAP 2025_03 Mar (Delivered)</div><div class="tl-title">DMND0028407 – PnA Response vs Order Simulation  |  DMND0028406 – PnA Error Messages (Both Closed)</div></div></div>
+  <div class="tl-row"><div class="tl-dot" style="background:#16a34a"></div><div class="tl-content"><div class="tl-date">SAP 2025_09 Sept (Delivered)</div><div class="tl-title">DMND0029860 – Scheduling Agreement Orderbook (Closed)</div></div></div>
+  <div class="tl-row"><div class="tl-dot" style="background:#16a34a"></div><div class="tl-content"><div class="tl-date">SAP 2025_10 Oct (Delivered)</div><div class="tl-title">DMND0028814 – Lead Time N2 Items  |  DMND0031268 – SFM Project West Carve Out (Both Closed)</div></div></div>
+  <div class="tl-row"><div class="tl-dot" style="background:#16a34a"></div><div class="tl-content"><div class="tl-date">SAP 2025_11 Nov (Delivered)</div><div class="tl-title">DMND0028917 – ASN &amp; Packing Slip (Incident Fix)  |  DMND0031806 – Indirect Customer Order Fetch  |  DMND0031879 – Error Monitoring  |  DMND0031826 – QMPS Availability (Closed)</div></div></div>
+  <div class="tl-row"><div class="tl-dot" style="background:#16a34a"></div><div class="tl-content"><div class="tl-date">SAP 2025_12 Dec (Delivered)</div><div class="tl-title">DMND0031830 – Export Consolidation Fields (Closed)</div></div></div>
+  <div class="tl-row"><div class="tl-dot" style="background:#f59e0b"></div><div class="tl-content"><div class="tl-date">SAP 2026_03 Mar (DAB Queue)</div><div class="tl-title">DMND0024256 – Digital Certificate</div></div></div>
+  <div class="tl-row"><div class="tl-dot" style="background:#f59e0b"></div><div class="tl-content"><div class="tl-date">SAP-2026-04 Apr (DAB Queue)</div><div class="tl-title">DMND0032844 – Modify Discontinued Item Warning</div></div></div>
+  <div class="tl-row"><div class="tl-dot" style="background:#7c5cd8"></div><div class="tl-content"><div class="tl-date">SAP-2026-06 May / SPQ+ (Partially Deployed)</div><div class="tl-title">DMND0032797 – Lead Time v3 SPQ+/ZCATP (S4H deployed, SPQ+ realization starting)</div></div></div>
+  <div class="tl-row"><div class="tl-dot" style="background:#7c5cd8"></div><div class="tl-content"><div class="tl-date">SFM_2026_07 July (Under SFM Realization)</div><div class="tl-title">DMND0033528 – PnA &amp; Lead Time in Quote Flow / Special Price Scenario</div></div></div>
+  <div class="tl-row"><div class="tl-dot" style="background:#7c5cd8"></div><div class="tl-content"><div class="tl-date">APIM/SFM_2026_08 Aug (Under Realization)</div><div class="tl-title">DMND0035777 – Product Group &amp; Discount in PnA (APIM dev starts after 10-Aug)  |  DMND0071 – Unit Price Commercial Discount SFM</div></div></div>
+  <div class="tl-row"><div class="tl-dot" style="background:#7c5cd8"></div><div class="tl-content"><div class="tl-date">WCL/FW_2026_08 / SAP_2026_09 (Pre-Study)</div><div class="tl-title">DMND0034755 – CMIR Handling in SFM (Held due to PW, starts post-May)</div></div></div>
+  <div class="tl-row"><div class="tl-dot" style="background:#38bdf8"></div><div class="tl-content"><div class="tl-date">SFM_2026_06 June (Closed)</div><div class="tl-title">DMND0036275 – Selectable Bill-To at Order Entry (Completed in SFM)</div></div></div>
+  <div class="tl-row"><div class="tl-dot" style="background:#16a34a"></div><div class="tl-content"><div class="tl-date">APIM/SFM_2026_05 May (Deployed into PRD)</div><div class="tl-title">DMND0034407 – C4C Contacts Sync (Deployed in APIM production)</div></div></div>
+  <div class="tl-row"><div class="tl-dot" style="background:#16a34a"></div><div class="tl-content"><div class="tl-date">SPQ+_2026 04 April (Closed)</div><div class="tl-title">DMND0028879 – SPQ+ Backend Performance Improvements (Completed in SPQ)</div></div></div>
+</div>
+
+
+<div class="sec">Owner Workload — Demand Distribution by Status</div>
+<div class="row2">
+  <div class="card">
+    <div class="card-title">Samarendu Kumar — 32 demands</div>
+    <div class="bar-row"><div class="label">Closed</div><div class="bar-track"><div class="bar-fill c-closed" style="width:100%"></div></div><div class="count">13</div><div class="pct">41%</div></div>
+    <div class="bar-row"><div class="label">DAB Queue</div><div class="bar-track"><div class="bar-fill c-dab" style="width:85%"></div></div><div class="count">11</div><div class="pct">34%</div></div>
+    <div class="bar-row"><div class="label">ON HOLD</div><div class="bar-track"><div class="bar-fill c-hold" style="width:38%"></div></div><div class="count">5</div><div class="pct">16%</div></div>
+    <div class="bar-row"><div class="label">Under Realization</div><div class="bar-track"><div class="bar-fill c-real" style="width:15%"></div></div><div class="count">2</div><div class="pct">6%</div></div>
+    <div class="bar-row"><div class="label">Pre-Study / Other</div><div class="bar-track"><div class="bar-fill c-ps" style="width:8%"></div></div><div class="count">1</div><div class="pct">3%</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Dinesh Kumar — 21 demands</div>
+    <div class="bar-row"><div class="label">Closed</div><div class="bar-track"><div class="bar-fill c-closed" style="width:100%"></div></div><div class="count">8</div><div class="pct">38%</div></div>
+    <div class="bar-row"><div class="label">DAB Queue</div><div class="bar-track"><div class="bar-fill c-dab" style="width:88%"></div></div><div class="count">7</div><div class="pct">33%</div></div>
+    <div class="bar-row"><div class="label">ON HOLD</div><div class="bar-track"><div class="bar-fill c-hold" style="width:50%"></div></div><div class="count">4</div><div class="pct">19%</div></div>
+    <div class="bar-row"><div class="label">Pre-Study / Screen</div><div class="bar-track"><div class="bar-fill c-ps" style="width:25%"></div></div><div class="count">2</div><div class="pct">10%</div></div>
+  </div>
+</div>
+
+
+<div class="sec">Draft Demands &amp; IDEAs Pipeline (Sheet 2 — 124 rows / ~30 unique demands)</div>
+<div class="pipe-grid" style="margin-bottom:14px">
+  <div class="pipe-card"><div class="pc-num">30+</div><div class="pc-lbl">Unique Draft Demands</div></div>
+  <div class="pipe-card"><div class="pc-num" style="color:#16a34a">18</div><div class="pc-lbl">Roadmap = Y (Active)</div></div>
+  <div class="pipe-card"><div class="pc-num" style="color:#94a3b8">30+</div><div class="pc-lbl">Roadmap = N / NEXUS</div></div>
+  <div class="pipe-card"><div class="pc-num" style="color:#d97706">8</div><div class="pc-lbl">ON HOLD in Draft</div></div>
+</div>
+<div class="card" style="margin-bottom:14px">
+  <div class="card-title">Draft Pipeline — Key Roadmap Demands</div>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Demand No</th><th>Title</th><th>Persona</th><th>Triage Qtr</th><th>BA</th><th>Roadmap</th><th>Notes</th></tr>
+      <tr><td>DMND0034500</td><td>Display correct item price in order book</td><td>Buyer</td><td>Q2 2026</td><td>Hanna</td><td><span class="rtag r-y">Y</span></td><td>POC done earlier, ready for screening</td></tr>
+      <tr><td>DMND0035401</td><td>Prevent duplicate quote / display quote price</td><td>Buyer</td><td>Q3 2026</td><td>Hanna</td><td><span class="rtag r-y">Y</span></td><td>Rating 8; align with Mickey &amp; Samarendu</td></tr>
+      <tr><td>DMND0033528</td><td>Price &amp; Availability check — Special price scenario</td><td>Buyer</td><td>—</td><td>Hanna</td><td><span class="rtag r-y">Y</span></td><td>Rating by CX Experts 5-Aug; align Mickey/Samarendu</td></tr>
+      <tr><td>DMND0029348</td><td>New pricing condition for current price</td><td>Buyer</td><td>Q3 2026</td><td>Hanna</td><td><span class="rtag r-y">Y</span></td><td>Rating 10; Hanna email to Johanna 27-Jul-2026</td></tr>
+      <tr><td>DMND0034873</td><td>Customer can edit a quote when sent to SKF</td><td>Buyer</td><td>Q4 2026</td><td>Cecilia</td><td><span class="rtag r-y">Y</span></td><td>Rating 10; dep on DMND0032862</td></tr>
+      <tr><td>DMND0031835</td><td>Request / display technical ticket</td><td>Buyer</td><td>Q3 2026</td><td>Cecilia</td><td><span class="rtag r-y">Y</span></td><td>On hold – Markus Hoehn stopped; focus on chatbot</td></tr>
+      <tr><td>DMND0027327</td><td>Consume new pricing condition from DMND002348</td><td>Buyer</td><td>Q4 2026</td><td>—</td><td><span class="rtag r-y">Y</span></td><td>Dep on DMND0029348</td></tr>
+      <tr><td>DMND0035625</td><td>Display country &amp; city of supplying warehouse</td><td>Buyer</td><td>Q4 2026</td><td>Hanna</td><td><span class="rtag r-y">Y</span> <span class="rtag r-inv">Reject</span></td><td>Rating 8; reject 6mo after DMND0031830 deployed</td></tr>
+      <tr><td>DMND0031827</td><td>Display status when item is replaced</td><td>Buyer</td><td>Q1 2027</td><td>—</td><td><span class="rtag r-y">Y</span></td><td>Rating 10; handover to NEXUS when ready</td></tr>
+      <tr><td>DMND0032694</td><td>Optimised lead time — automated logic</td><td>Buyer</td><td>Q1 2027</td><td>Tilman</td><td><span class="rtag r-y">Y</span></td><td>Rating 9; resource plan required from Monali Roy</td></tr>
+      <tr><td>DMND0032384</td><td>Most environmentally friendly transport option</td><td>Buyer</td><td>Q1 2027</td><td>—</td><td><span class="rtag r-y">Y</span></td><td>In planning</td></tr>
+      <tr><td>DMND0031836</td><td>Delivery alternatives + eco-friendly transport</td><td>Buyer</td><td>Q1 2027</td><td>—</td><td><span class="rtag r-y">Y</span></td><td>NEXUS dependency</td></tr>
+      <tr><td>DMND0036801</td><td>SFM Invoice Download Improvements</td><td>Buyer</td><td>Q3 2026</td><td>Cecilia</td><td><span class="rtag r-n">N</span></td><td>CX Expert rating 19-Aug; Turkey, CZ, Eurotrade issues</td></tr>
+      <tr><td>DMND0037018</td><td>Schedule Agreement OB — data quality improvement</td><td>Buyer</td><td>Q4 2026</td><td>Cecilia</td><td><span class="rtag r-n">N</span></td><td>CX Expert rating 19-Aug; SFM filtering logic needed</td></tr>
+      <tr><td>DMND0031156</td><td>Listing/Exclusion list for material</td><td>Buyer</td><td>Q2 2026</td><td>Hanna</td><td><span class="rtag r-n">N</span></td><td>Handover NEXUS; Rating EU9, Iberic9, Germany10</td></tr>
+      <tr><td>DMND0031673</td><td>Register/list pallet returns</td><td>Buyer</td><td>—</td><td>Cecilia</td><td><span class="rtag r-n">N</span></td><td><span class="rtag r-hold">ON HOLD</span> Paused 29-Apr-2026; post Project West</td></tr>
+      <tr><td>DMND0036152</td><td>SFM consume listing/exclusions from assortment</td><td>Buyer</td><td>—</td><td>Hanna</td><td><span class="rtag r-n">N</span></td><td><span class="rtag r-hold">ON HOLD</span> Dep on DMND0031156</td></tr>
+      <tr><td>DMND0036284</td><td>Display pieces customer is allowed to buy</td><td>Buyer</td><td>—</td><td>—</td><td><span class="rtag r-n">N</span></td><td>NEXUS handover</td></tr>
+      <tr><td>DMND0036302</td><td>Prevent availability display for obsolete items</td><td>Buyer</td><td>—</td><td>—</td><td><span class="rtag r-n">N</span></td><td>NEXUS handover; S4H material status 50/85 changes</td></tr>
+    </table>
+  </div>
+</div>
+
+
+<div class="sec">Draft Pipeline — Triage Quarter Distribution</div>
+<div class="row3">
+  <div class="card">
+    <div class="card-title">Q2 2026</div>
+    <div style="font-size:24px;font-weight:700;color:#3b82d4;margin-bottom:6px">4</div>
+    <div style="font-size:12px;color:#57606a">DMND0031156 (Listing/Exclusion), DMND0034500 (Order Price), DMND0035871 (COM Suppliers), DMND0036152 (Consume Listing)</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Q3 2026</div>
+    <div style="font-size:24px;font-weight:700;color:#7c5cd8;margin-bottom:6px">6</div>
+    <div style="font-size:12px;color:#57606a">DMND0029348, DMND0035401, DMND0033528, DMND0036801, DMND0031835, DMND0036803</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Q4 2026</div>
+    <div style="font-size:24px;font-weight:700;color:#0ea5e9;margin-bottom:6px">5</div>
+    <div style="font-size:12px;color:#57606a">DMND0034873, DMND0036781, DMND0027327, DMND0035625, DMND0037018</div>
+  </div>
+</div>
+<div class="row3">
+  <div class="card">
+    <div class="card-title">Q1 2027</div>
+    <div style="font-size:24px;font-weight:700;color:#f59e0b;margin-bottom:6px">4</div>
+    <div style="font-size:12px;color:#57606a">DMND0031827, DMND0032694, DMND0032384, DMND0031836</div>
+  </div>
+  <div class="card">
+    <div class="card-title">NEXUS / Deferred</div>
+    <div style="font-size:24px;font-weight:700;color:#94a3b8;margin-bottom:6px">8+</div>
+    <div style="font-size:12px;color:#57606a">DMND0036284, DMND0036302, DMND0036303, DMND0029205, DMND0031839, DMND0031837, DMND0033793, DMND0031838</div>
+  </div>
+  <div class="card">
+    <div class="card-title">ON HOLD (Draft)</div>
+    <div style="font-size:24px;font-weight:700;color:#d97706;margin-bottom:6px">8</div>
+    <div style="font-size:12px;color:#57606a">DMND0031673, DMND0036152, DMND0035426, DMND0032684–32689 cluster, IDEA0034311</div>
+  </div>
+</div>
+
+
+<div class="sec">Full Demand Register — 72 Final Demands</div>
+<div class="card">
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>#</th><th>Demand No.</th><th>System</th><th>SAP Release</th><th>Status</th><th>Primary Owner</th><th>Secondary</th></tr>
+      <tr><td class="td-num">1</td><td>DMND0020213 – User relationship with Sold To</td><td class="td-sys">WLA-SSO-C4C-CPI-APIM</td><td class="td-sys">N/A</td><td><span class="badge b-closed">Closed</span></td><td>Samarendu</td><td>Jyothi</td></tr>
+      <tr><td class="td-num">2</td><td>DMND0027362 – Final customer in S4 APIs (IDEA0027080)</td><td class="td-sys">S4H-APIM-MDG</td><td class="td-sys">SAP 2025_01</td><td><span class="badge b-closed">Closed</span></td><td>Samarendu</td><td>NA</td></tr>
+      <tr><td class="td-num">3</td><td>DMND0028228 – Indirect customer Identifier in SFM</td><td class="td-sys">C3/SFM</td><td class="td-sys">N/A</td><td><span class="badge b-closed">Closed</span></td><td>Samarendu</td><td>SFM FE</td></tr>
+      <tr><td class="td-num">4</td><td>DMND0023441 – SKF for ME Contract Price API</td><td class="td-sys">Snowflake-APIM</td><td class="td-sys">N/A</td><td><span class="badge b-closed">Closed</span></td><td>Dinesh</td><td>Snowflake</td></tr>
+      <tr><td class="td-num">5</td><td>DMND0027327 – Identifier for current/automated price</td><td class="td-sys">S4H-APIM</td><td class="td-sys">TBD</td><td><span class="badge b-hold">ON HOLD</span></td><td>Dinesh</td><td>NA</td></tr>
+      <tr><td class="td-num">6</td><td>Indirect Partner – SPQ+ (no demand no.)</td><td class="td-sys">SPQ+-APIM</td><td class="td-sys">N/A</td><td><span class="badge b-hold">ON HOLD</span></td><td>SPQ+ Team</td><td>Samarendu</td></tr>
+      <tr><td class="td-num">7</td><td>DMND0028814 – Lead Time for N2 items in SFM</td><td class="td-sys">S4H-MDG-Snowflake-APIM</td><td class="td-sys">SAP 2025_10</td><td><span class="badge b-closed">Closed</span></td><td>Samarendu</td><td>NA</td></tr>
+      <tr><td class="td-num">8</td><td>DMND0028407 – PnA Response vs Order Simulation</td><td class="td-sys">S4H-APIM</td><td class="td-sys">SAP 2025_03</td><td><span class="badge b-closed">Closed</span></td><td>Samarendu</td><td>NA</td></tr>
+      <tr><td class="td-num">9</td><td>DMND0028917 – Display/Download ASN &amp; Packing Slip</td><td class="td-sys">S4H-APIM</td><td class="td-sys">SAP 2025_11</td><td><span class="badge b-inc">Incident Fix</span></td><td>Dinesh</td><td>NA</td></tr>
+      <tr><td class="td-num">10</td><td>DMND0028406 – Error messages of PnA</td><td class="td-sys">S4H-APIM</td><td class="td-sys">SAP 2025_03</td><td><span class="badge b-closed">Closed</span></td><td>Dinesh</td><td>NA</td></tr>
+      <tr><td class="td-num">11</td><td>DMND0029205 – Order book robustness / Ecommerce Suite</td><td class="td-sys">S4H-APIM</td><td class="td-sys">N/A</td><td><span class="badge b-hold">ON HOLD</span></td><td>Samarendu</td><td>NA</td></tr>
+      <tr><td class="td-num">12</td><td>DMND0029521 – C4C Ticket Enhancements</td><td class="td-sys">C4C-APIM</td><td class="td-sys">N/A</td><td><span class="badge b-dab">DAB Queue</span></td><td>Samarendu/Satish</td><td>Satish</td></tr>
+      <tr><td class="td-num">13</td><td>DMND0029860 – Scheduling Agreement Orderbook</td><td class="td-sys">S4H-APIM</td><td class="td-sys">SAP 2025_09</td><td><span class="badge b-closed">Closed</span></td><td>Dinesh</td><td>NA</td></tr>
+      <tr><td class="td-num">14</td><td>DMND0029812 – Buffer SO in SFM from APIM</td><td class="td-sys">APIM</td><td class="td-sys">N/A</td><td><span class="badge b-closed">Closed</span></td><td>Sukanya/Samarendu</td><td>NA</td></tr>
+      <tr><td class="td-num">15</td><td>DMND0024256 – Digital Certificate</td><td class="td-sys">S4H-APIM-DocuSign-OpenText</td><td class="td-sys">SAP 2026_03</td><td><span class="badge b-dab">DAB Queue</span></td><td>Samarendu</td><td>Dinesh</td></tr>
+      <tr><td class="td-num">16</td><td>DMND0030127 – Product Carbon Footprint data</td><td class="td-sys">PIM-SFM</td><td class="td-sys">N/A</td><td><span class="badge b-closed">Closed</span></td><td>Samarendu</td><td>PIM</td></tr>
+      <tr><td class="td-num">17</td><td>DMND0030128 – Product Material Compliance data</td><td class="td-sys">Snowflake-APIM-SFM</td><td class="td-sys">N/A</td><td><span class="badge b-closed">Closed</span></td><td>Samarendu</td><td>NA</td></tr>
+      <tr><td class="td-num">18</td><td>DMND0029897 – SKF For Me Performance / SFM pain points</td><td class="td-sys">Integration</td><td class="td-sys">N/A</td><td><span class="badge b-closed">Closed</span></td><td>Samarendu</td><td>NA</td></tr>
+      <tr><td class="td-num">19</td><td>DMND0029323 – Create C4C ticket enhancement</td><td class="td-sys">SFM</td><td class="td-sys">N/A</td><td><span class="badge b-closed">Closed</span></td><td>FE/Samarendu</td><td>Satish</td></tr>
+      <tr><td class="td-num">20</td><td>DMND0031243 – List of Credit Note data &amp; download PDF</td><td class="td-sys">SFM-S4H-APIM</td><td class="td-sys">N/A</td><td><span class="badge b-closed">Closed</span></td><td>Dinesh</td><td>NA</td></tr>
+      <tr><td class="td-num">21</td><td>DMND0031268 – SFM Project West carve out</td><td class="td-sys">SFM-S4H-C3</td><td class="td-sys">SAP 2025_10</td><td><span class="badge b-closed">Closed</span></td><td>Samarendu</td><td>Darshit</td></tr>
+      <tr><td class="td-num">22</td><td>DMND0031349 – MVP Service Persona</td><td class="td-sys">ServiceMax</td><td class="td-sys">N/A</td><td><span class="badge b-dab">DAB Queue</span></td><td>Samarendu</td><td>SVMX</td></tr>
+      <tr><td class="td-num">23</td><td>DMND0031879 – Error Monitoring &amp; Analysis</td><td class="td-sys">S4H</td><td class="td-sys">SAP 2025_11</td><td><span class="badge b-closed">Closed</span></td><td>Samarendu</td><td>NA</td></tr>
+      <tr><td class="td-num">24</td><td>DMND0031834 – Location/Asset/Bearing – Condition Monitoring</td><td class="td-sys">ServiceMax-SFM</td><td class="td-sys">N/A</td><td><span class="badge b-dab">DAB Queue</span></td><td>Dinesh</td><td>SVMX</td></tr>
+      <tr><td class="td-num">25</td><td>DMND0031833 – Indirect customer ship to address</td><td class="td-sys">S4H-APIM</td><td class="td-sys">TBD</td><td><span class="badge b-hold">ON HOLD</span></td><td>Dinesh</td><td>NA</td></tr>
+      <tr><td class="td-num">26</td><td>DMND0031832 – Status update of Remanufacturing request</td><td class="td-sys">SVMX-SFM-APIM-S4H-SPQ+-C4C</td><td class="td-sys">TBD</td><td><span class="badge b-ps">Pre-Study</span></td><td>Dinesh</td><td>SVMX</td></tr>
+      <tr><td class="td-num">27</td><td>DMND0031806 – Indirect customer order fetch API</td><td class="td-sys">S4H-APIM</td><td class="td-sys">SAP 2025_11</td><td><span class="badge b-closed">Closed</span></td><td>Dinesh</td><td>NA</td></tr>
+      <tr><td class="td-num">28</td><td>DMND0031803 – Master Persona in SFM/C4C</td><td class="td-sys">C4C-APIM</td><td class="td-sys">N/A</td><td><span class="badge b-closed">Closed</span></td><td>Samarendu</td><td>Jyothi</td></tr>
+      <tr><td class="td-num">29</td><td>DMND0031826 – QMPS availability to PnA/Full Availability API</td><td class="td-sys">S4H-APIM</td><td class="td-sys">SAP-2025-11</td><td><span class="badge b-closed">Closed</span></td><td>Samarendu</td><td>NA</td></tr>
+      <tr><td class="td-num">30</td><td>DMND0032383 – Display PCF values in SFM</td><td class="td-sys">Snowflake-APIM</td><td class="td-sys">N/A</td><td><span class="badge b-dab">DAB Queue</span></td><td>Samarendu</td><td>Snowflake</td></tr>
+      <tr><td class="td-num">31</td><td>DMND0032694 – Lead time v2 Snowflake automated calculations</td><td class="td-sys">Snowflake-APIM</td><td class="td-sys">N/A</td><td><span class="badge b-screen">Screening</span></td><td>Samarendu</td><td>Snowflake</td></tr>
+      <tr><td class="td-num">32</td><td>DMND0032689 – PFAS certificate</td><td class="td-sys">Snowflake-APIM</td><td class="td-sys">TBD</td><td><span class="badge b-hold">ON HOLD</span></td><td>Samarendu</td><td>Snowflake</td></tr>
+      <tr><td class="td-num">33</td><td>DMND0032687 – TSCA section 6(h): US law</td><td class="td-sys">Snowflake-APIM</td><td class="td-sys">TBD</td><td><span class="badge b-hold">ON HOLD</span></td><td>Dinesh</td><td>Snowflake</td></tr>
+      <tr><td class="td-num">34</td><td>DMND0032686 – Canada CEPA 1999</td><td class="td-sys">Snowflake-APIM</td><td class="td-sys">TBD</td><td><span class="badge b-hold">ON HOLD</span></td><td>Dinesh</td><td>Snowflake</td></tr>
+      <tr><td class="td-num">35</td><td>DMND0032685 – California Proposition 65</td><td class="td-sys">Snowflake-APIM</td><td class="td-sys">TBD</td><td><span class="badge b-hold">ON HOLD</span></td><td>Dinesh</td><td>Snowflake</td></tr>
+      <tr><td class="td-num">36</td><td>DMND0032684 – Persistent Organic Pollutants</td><td class="td-sys">Snowflake-APIM</td><td class="td-sys">TBD</td><td><span class="badge b-hold">ON HOLD</span></td><td>Dinesh</td><td>Snowflake</td></tr>
+      <tr><td class="td-num">37</td><td>DMND0032844 – Modify discontinued item warning</td><td class="td-sys">S4H-PI-WCL</td><td class="td-sys">SAP-2026-04</td><td><span class="badge b-dab">DAB Queue</span></td><td>Samarendu</td><td>NA</td></tr>
+      <tr><td class="td-num">38</td><td>DMND0032797 – Lead Time v3 SPQ+/ZCATP</td><td class="td-sys">S4H-SPQ+</td><td class="td-sys">SAP-2026-06</td><td><span class="badge b-other">Part. Deployed</span></td><td>Samarendu</td><td>SPQ+</td></tr>
+      <tr><td class="td-num">39</td><td>DMND0032864 – Status update on C4C Ticket</td><td class="td-sys">C4C-APIM-SFM</td><td class="td-sys">N/A</td><td><span class="badge b-dab">DAB Queue</span></td><td>Samarendu</td><td>Satish</td></tr>
+      <tr><td class="td-num">40</td><td>DMND0033050 – Onboarding internal customer on SFM</td><td class="td-sys">S4H-APIM</td><td class="td-sys">TBD</td><td><span class="badge b-hold">ON HOLD</span></td><td>Samarendu</td><td>NA</td></tr>
+      <tr><td class="td-num">41</td><td>DMND0031830 – Export Consolidation fields in Order fetch</td><td class="td-sys">S4H-GTS-APIM</td><td class="td-sys">SAP-2025-12</td><td><span class="badge b-closed">Closed</span></td><td>Dinesh</td><td>NA</td></tr>
+      <tr><td class="td-num">42</td><td>DMND0032391 – C4C Ticket Certificate PMC REACH &amp; RoHS</td><td class="td-sys">C4C-APIM</td><td class="td-sys">N/A</td><td><span class="badge b-dab">DAB Queue</span></td><td>Samarendu</td><td>—</td></tr>
+      <tr><td class="td-num">43</td><td>DMND0032822 – Add service materials in SFM catalogue</td><td class="td-sys">MDG-S4H-WCL-PIM-SFM</td><td class="td-sys">TBD</td><td><span class="badge b-real">Under Real.</span></td><td>Samarendu</td><td>SFM FE</td></tr>
+      <tr><td class="td-num">44</td><td>DMND0033700 – Service delivery communication</td><td class="td-sys">SVMX-APIM</td><td class="td-sys">N/A</td><td><span class="badge b-dab">DAB Queue</span></td><td>Dinesh</td><td>SVMX</td></tr>
+      <tr><td class="td-num">45</td><td>DMND0034136 – Activate currency conversion in PnA</td><td class="td-sys">S4H-APIM</td><td class="td-sys">TBD</td><td><span class="badge b-dab">DAB Queue</span></td><td>Samarendu</td><td>SPQ+</td></tr>
+      <tr><td class="td-num">46</td><td>DMND0031674 – Goods Marking SFM Quote→SPQ→SAP SO</td><td class="td-sys">S4H-SPQ+-SFM</td><td class="td-sys">TBD</td><td><span class="badge b-dab">DAB Queue</span></td><td>Samarendu</td><td>SPQ+</td></tr>
+      <tr><td class="td-num">47</td><td>DMND0034282 – Display OMR error/refund/cancellation in SFM</td><td class="td-sys">S4H-APIM</td><td class="td-sys">TBD</td><td><span class="badge b-dab">DAB Queue</span></td><td>Dinesh</td><td>NA</td></tr>
+      <tr><td class="td-num">48</td><td>DMND0033799 – Consume ECCN from GTS to Order Fetch API</td><td class="td-sys">GTS-S4H-APIM</td><td class="td-sys">TBD</td><td><span class="badge b-dab">DAB Queue</span></td><td>Dinesh</td><td>GTS</td></tr>
+      <tr><td class="td-num">49</td><td>DMND0033732 – Create field service Work Order</td><td class="td-sys">SVMX-APIM</td><td class="td-sys">TBD</td><td><span class="badge b-dab">DAB Queue</span></td><td>Samarendu</td><td>SVMX</td></tr>
+      <tr><td class="td-num">50</td><td>DMND0033528 – PnA &amp; Lead Time in Quote flow / Special Price</td><td class="td-sys">SFM-APIM-SPQ</td><td class="td-sys">SFM 2026_07</td><td><span class="badge b-real">SFM Realiz.</span></td><td>Samarendu</td><td>SFM FE</td></tr>
+      <tr><td class="td-num">51</td><td>DMND0034755 – CMIR Handling in SFM</td><td class="td-sys">WCL-Findwise</td><td class="td-sys">WCL 2026_08</td><td><span class="badge b-ps">Pre-Study</span></td><td>Samarendu</td><td>SFM FE</td></tr>
+      <tr><td class="td-num">52</td><td>DMND0034407 – C4C Contacts sync</td><td class="td-sys">C4C-SFM</td><td class="td-sys">APIM/SFM 2026_05</td><td><span class="badge b-dep">Deployed PRD</span></td><td>Samarendu</td><td>Jyothi</td></tr>
+      <tr><td class="td-num">53</td><td>DMND0034238 – Add multiple attachments in C4C ticket</td><td class="td-sys">C4C-APIM</td><td class="td-sys">TBD</td><td><span class="badge b-dab">DAB Queue</span></td><td>Dinesh</td><td>Satish</td></tr>
+      <tr><td class="td-num">54</td><td>DMND0035486 – Dangerous goods display over SFM portal</td><td class="td-sys">GTS-MDG-SFM</td><td class="td-sys">TBD</td><td><span class="badge b-dab">DAB Queue</span></td><td>Samarendu</td><td>PIM/FW</td></tr>
+      <tr><td class="td-num">55</td><td>DMND0031831 – Reman WO create and fetch</td><td class="td-sys">SVMX-SFM</td><td class="td-sys">TBD</td><td><span class="badge b-dab">DAB Queue</span></td><td>Samarendu</td><td>SVMX</td></tr>
+      <tr><td class="td-num">56</td><td>DMND0035721 – Display correct item status in order book</td><td class="td-sys">S4H</td><td class="td-sys">TBD</td><td><span class="badge b-ps">Pre-Study</span></td><td>Samarendu</td><td>NA</td></tr>
+      <tr><td class="td-num">57</td><td>DMND0033794 – Display down payment orders / advance payment block</td><td class="td-sys">S4H-SFM</td><td class="td-sys">TBD</td><td><span class="badge b-real">SFM Realiz.</span></td><td>Dinesh</td><td>SFM FE</td></tr>
+      <tr><td class="td-num">58</td><td>DMND0032634 – Display CMIR in contract price service</td><td class="td-sys">Snowflake-SFM</td><td class="td-sys">NA</td><td><span class="badge b-closed">Closed</span></td><td>Dinesh</td><td>Snowflake</td></tr>
+      <tr><td class="td-num">59</td><td>DMND0035777 – Product group &amp; discount in PnA / List Price architecture</td><td class="td-sys">Snowflake-APIM-SFM</td><td class="td-sys">APIM/SFM 2026_08</td><td><span class="badge b-real">Under Real.</span></td><td>Dinesh</td><td>Snowflake</td></tr>
+      <tr><td class="td-num">60</td><td>DMND0036521 – Display freight &amp; packaging surcharge</td><td class="td-sys">Snowflake-APIM-SFM</td><td class="td-sys">NA</td><td><span class="badge b-ps">Pre-Study</span></td><td>Dinesh</td><td>Snowflake</td></tr>
+      <tr><td class="td-num">61</td><td>DMND0036801 – SFM Invoice Download Improvements</td><td class="td-sys">S4-APIM-SFM</td><td class="td-sys">TBD</td><td><span class="badge b-ps">Pre-Study</span></td><td>Dinesh</td><td>SFM FE</td></tr>
+      <tr><td class="td-num">62</td><td>DMND0037018 – SFM Schedule Agreement OB Improvement</td><td class="td-sys">SFM</td><td class="td-sys">NA</td><td><span class="badge b-other">PS Not Started</span></td><td>Dinesh</td><td>NA</td></tr>
+      <tr><td class="td-num">63</td><td>DMND0032862 – SKF edit quote when sent to customer</td><td class="td-sys">SPQ+-APIM</td><td class="td-sys">NA</td><td><span class="badge b-screen">Screening</span></td><td>—</td><td>—</td></tr>
+      <tr><td class="td-num">64</td><td>DMND0028879 – SPQ+ backend performance improvements</td><td class="td-sys">SPQ+-APIM</td><td class="td-sys">SPQ+ 2026_04</td><td><span class="badge b-closed">Closed</span></td><td>Mickey</td><td>NA</td></tr>
+      <tr><td class="td-num">65</td><td>DMND0027119 – Soprex Inquiry and Quote Q2 2024</td><td class="td-sys">SPQ+-APIM</td><td class="td-sys">NA</td><td><span class="badge b-closed">Closed</span></td><td>Mickey</td><td>Radomir</td></tr>
+      <tr><td class="td-num">66</td><td>DMND0025522 – External tracking ID / external forwarder</td><td class="td-sys">EM</td><td class="td-sys">NA</td><td><span class="badge b-closed">Closed</span></td><td>Andreas Stoller</td><td>NA</td></tr>
+      <tr><td class="td-num">67</td><td>DMND0029011 – LSB Co2e saving certificate</td><td class="td-sys">ServiceMax</td><td class="td-sys">NA</td><td><span class="badge b-closed">Closed</span></td><td>Andrew Dollinger</td><td>—</td></tr>
+      <tr><td class="td-num">68</td><td>DMND0030241 – Add service lines in Inquiry/Quote process</td><td class="td-sys">SPQ+-APIM</td><td class="td-sys">NA</td><td><span class="badge b-screen">Screening</span></td><td>—</td><td>—</td></tr>
+      <tr><td class="td-num">69</td><td>DMND0030242 – Partial quantity ordering from quote</td><td class="td-sys">SPQ+-APIM</td><td class="td-sys">SPQ+ 2025_11</td><td><span class="badge b-closed">Closed</span></td><td>Mickey</td><td>Radomir</td></tr>
+      <tr><td class="td-num">70</td><td>DMND0035401 – Prevent duplicate quote / display quote price</td><td class="td-sys">SFM-APIM</td><td class="td-sys">NA</td><td><span class="badge b-other">Special Price</span></td><td>Samarendu</td><td>—</td></tr>
+      <tr><td class="td-num">71</td><td>(JIRA) Display unit price for commercial discount in PnA</td><td class="td-sys">SFM</td><td class="td-sys">SFM 2026_08</td><td><span class="badge b-real">SFM Realiz.</span></td><td>Samarendu</td><td>SFM FE</td></tr>
+      <tr><td class="td-num">72</td><td>DMND0036275 – SKF for Me Selectable Bill-To at Order Entry</td><td class="td-sys">SFM</td><td class="td-sys">SFM 2026_06</td><td><span class="badge b-closed">Closed</span></td><td>Samarendu</td><td>SFM FE</td></tr>
+    </table>
+  </div>
+</div>
+
+
+<div class="sec">Compliance Certificate Cluster — Dependency Chain</div>
+<div class="card" style="margin-bottom:14px">
+  <div class="card-title">Parent–Child Dependencies (all blocked on DMND0024256 Digital Certificate)</div>
+  <div style="background:#fef9ec;border:1px solid #fde68a;border-radius:6px;padding:12px;font-size:12px">
+    <div style="font-weight:700;color:#92400e;margin-bottom:8px">🔗 DMND0024256 – Digital Certificate (DAB Queue — SAP 2026_03 Mar)</div>
+    <div style="padding-left:20px;border-left:3px solid #fde68a">
+      <div style="margin-bottom:4px">└─ DMND0032689 – PFAS Certificate (ON HOLD – awaiting parent)</div>
+      <div style="margin-bottom:4px">└─ DMND0032687 – TSCA Section 6(h) US Law (ON HOLD – awaiting parent)</div>
+      <div style="margin-bottom:4px">└─ DMND0032686 – Canada CEPA 1999 (ON HOLD – awaiting parent)</div>
+      <div style="margin-bottom:4px">└─ DMND0032685 – California Proposition 65 (ON HOLD – awaiting parent)</div>
+      <div style="margin-bottom:4px">└─ DMND0032684 – Persistent Organic Pollutants (ON HOLD – awaiting parent)</div>
+      <div style="margin-bottom:4px">└─ DMND0035426 – Statement on Export Control Certificate (Draft – ON HOLD)</div>
+      <div>└─ Remanufacturing CO2e Certificate (Draft – ON HOLD)</div>
+    </div>
+  </div>
+  <div style="font-size:12px;color:#57606a;margin-top:10px"><strong>Critical path:</strong> DAB must confirm DMND0024256 first. Until then, 7 downstream certificate demands remain blocked. Immediate action: escalate DMND0024256 in next DAB cycle.</div>
+</div>
+
+
+<div class="sec">Executive Summary — Key Takeaways</div>
+<div class="card">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;font-size:13px">
+    <div>
+      <div style="font-weight:700;margin-bottom:6px;color:#16a34a">✓ Delivered (36% — 26 demands)</div>
+      <p style="color:#57606a;font-size:12px">26 demands successfully deployed into production. Key deliveries: QMPS Availability API (Nov-25), Export Consolidation Fields (Dec-25), SFM Project West Carve-Out (Oct-25), C4C Contacts Sync (May-26), SKF For Me Bill-To Selection (Jun-26), SPQ+ Performance Improvements (Apr-26).</p>
+    </div>
+    <div>
+      <div style="font-weight:700;margin-bottom:6px;color:#d97706">⏳ DAB Approval Queue (31% — 22 demands)</div>
+      <p style="color:#57606a;font-size:12px">22 demands have Pre-Study approved and are waiting for DAB confirmation. This is the largest single action needed. A focused DAB review session could unblock 22 realizations immediately. Priority candidates: DMND0024256, DMND0031349 (Service Persona), DMND0034136 (Currency Conversion), DMND0031674 (Goods Marking).</p>
+    </div>
+    <div>
+      <div style="font-weight:700;margin-bottom:6px;color:#475569">⏸ On Hold (13% — 9 demands)</div>
+      <p style="color:#57606a;font-size:12px">9 demands on hold — majority blocked by Project West. Once Project West completes, DMND0027327, DMND0031833, DMND0031673 and the full Snowflake compliance cluster (5 demands) can resume. Expected resumption: H2 2026.</p>
+    </div>
+    <div>
+      <div style="font-weight:700;margin-bottom:6px;color:#7c5cd8">🔧 In Realization (7% — 5 demands)</div>
+      <p style="color:#57606a;font-size:12px">5 demands actively in development: DMND0032822 (Service Catalogue CMS), DMND0035777 (PnA Product Group+Discount, APIM dev starts 10-Aug), DMND0033528 (Quote PnA Flow, SFM Jul-26), DMND0033794 (Down Payments SFM), DMND0071 (Unit Price Commercial Discount, SFM Aug-26).</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">SKF EMEA Digital Services  ·  Data: EMEA Dig Serv_Demand Status_05.08.2026.xlsx  ·  Made with IBM Bob</div>
+</div>
+</body>
+</html>
